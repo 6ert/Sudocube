@@ -5,30 +5,11 @@
 ## Blender: Blender is released under the GNU General Public License • http://download.blender.org/release/GPL-license.txt
 ## Disclaimer: The author makes no representations or warranties about the non-infringement or absence of other defects concerning the CC-licensed work.
 #######################################################################################
-## Add-on Mode:
-# bl_info = {
-#     "name": "Sudocube",
-#     "blender": (3, 3, 1),
-#     "category": "Object",
-# }
-# import time
-# print("Sleeping 3 before importing")
-# time.sleep(3)
-
 import bpy
-import sys
 import mathutils
 import random
 import time
 import os
-# from bpy.app.handlers import persistent
-# blend_dir = os.path.dirname(bpy.data.filepath)
-# if blend_dir not in sys.path:
-#     sys.path.append(blend_dir)
-# import Sudocube
-# import importlib
-# importlib.reload(Sudocube)
-# Sudocube.main()
 
 ############### PathPanel #################
 class PathPanel(bpy.types.Panel):
@@ -324,58 +305,16 @@ class SudocubeSystemProperties(bpy.types.PropertyGroup):
     """ bpy.data.filepath
     not available in Add-on Mode!
     Run in Scripting Mode """
-    # bl_idname = "scene.init_my_prop"
-    # bl_label = "Init my_prop"
 
     path : bpy.props.StringProperty(
         name="",
         description="Path to Directory",
-        default=os.path.dirname(bpy.data.filepath), # AttributeError 'RestrictData' object has no attribute 'filepath'
-        # if you see an exception like this, then the addon needs to be updated to access the context during execution rather then on registration
-        # default=os.path.dirname(__file__), # Addon: Missing texture: C:\Users\root\AppData\Roaming\Blender Foundation\Blender\3.3\scripts\addons\images/0.png
-        # default=os.getcwd(), # C:\Program Files\blender-3.3.1
-        # default=sys.argv[0], # C:\Program Files\blender-3.3.1
-        # (type alias) path: Module("os.path")
-        # OS routines for NT or Posix depending on what system we're on.
-        # This exports:
-        # all functions from posix or nt, e.g. unlink, stat, etc.
-        # os.path is either posixpath or ntpath
-        # os.name is either 'posix' or 'nt'
-        # os.curdir is a string representing the current directory (always '.')
-        # os.pardir is a string representing the parent directory (always '..')
-        # os.sep is the (or a most common) pathname separator ('/' or '\')
-        # os.extsep is the extension separator (always '.')
-        # os.altsep is the alternate pathname separator (None or '/')
-        # os.pathsep is the component separator used in $PATH etc
-        # os.linesep is the line separator in text files ('\r' or '\n' or '\r\n')
-        # os.defpath is the default search path for executables
-        # os.devnull is the file path of the null device ('/dev/null', etc.)
-        # Programs that import and use 'os' stand a better chance of being portable between different platforms. 
-        # Of course, they must then only use functions that are defined by all platforms (e.g., unlink and opendir), 
-        # and leave all pathname manipulation to os.path (e.g., split and join)
-        maxlen=1024,
+        default=os.path.dirname(bpy.data.filepath),         maxlen=1024,
         subtype='DIR_PATH'
         )
-
-    # @classmethod
-    # @bpy.app.handlers.persistent
-    # def poll(cls, context):
-    #     # return context.active_object is not None
-    #     return cls.path is not None
- 
-    # def execute(self, context):
-    #     if context.scene.my_prop != "initialized":
-    #         context.scene.my_prop = "initialized"
-    #         self.__class__.bl_label = "Change my_prop"
-    #     else:
-    #         context.scene.my_prop = "foobar"
-    #         self.__class__.bl_label = self.bl_label
-    #     return {'FINISHED'}
         
 bpy.utils.register_class(SudocubeSystemProperties)
 bpy.types.Scene.sudocube_path = bpy.props.PointerProperty(type=SudocubeSystemProperties)
-# bpy.types.Scene.sudocube_path: bpy.props.PointerProperty(type=SudocubeSystemProperties) # # can't access bpy.context here!
-# bpy.app.handlers.save_post.append(bpy.types.Scene.sudocube_path)
 
 ############### SudoCubeSettings #################
 class SudoCubeSettings(bpy.types.PropertyGroup):
@@ -411,8 +350,6 @@ def scoreInit():
     Score.score_total = 0
 
 def register():
-    # bpy.types.Scene.sudocube_path = bpy.props.PointerProperty(type=SudocubeSystemProperties) # # can't access bpy.context here!
-    # bpy.app.handlers.save_post.append(bpy.types.Scene.sudocube_path)
     bpy.utils.register_class(PathPanel)
     bpy.utils.register_class(SudoCubePanel)
     bpy.utils.register_class(ExplodeOperator) 
@@ -426,6 +363,4 @@ def unregister():
     bpy.utils.unregister_class(GameOperator)
     bpy.utils.unregister_class(ScoreOperator)
 
-# call in Add-on Mode:
-# if __name__ == "__main__":
 register()
