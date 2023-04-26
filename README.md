@@ -1,4 +1,4 @@
-# Sudocube version 0.99 
+# Sudocube version 1.0
 3D Sudoku by Gert Weber
 Game to play in Blender
 
@@ -33,7 +33,7 @@ Blender - Edit - Preferences - Add-ons - install - SudocubeAddon.py
 The add-on is then in the list under 'Object: Sudocube Addon'.
 You have to activate it by marking it.
 Because Blender stores the installed add-ons in a special path in the file system, 
-the folder 'images' with the textures must be made known.
+the folder 'images' with the textures must be propagated.
 Enter the path under 'Object: Sudocube Addon' - Preferences (expand add-on left over the arrow)
 e.g.: C:\Users\root\Documents\images\
 if there are the files '0.png' - '9.png'.
