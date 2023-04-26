@@ -1,6 +1,5 @@
 Q: I don't see any numbers on the cubes after starting a new game.
 A: Please check 'images' path is found by Sudocube.
-
 Check it in the head of the 'Tools' - Sudocube tab - menu
 e.g. Image Path
 'C:\Users\root\Documents\images'
@@ -9,7 +8,6 @@ In Add-on mode the 'images' folder should be referenced in the Add-on preference
 
 Q: I still don't see any numbers on the cubes.
 A: Check Viewport Shading in Blender.
-
 At least 'Material Preview' should be enabled
 
 Q: I don't see any game options in blender.
