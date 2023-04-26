@@ -1,11 +1,10 @@
 #######################################################################################
-## Title: Sudocube
+## Title: SudocubeAddon
 ## Author: Gert Weber • info@weberlebt.de • https://weberlebt.de • 2023
 ## License: CC BY lizenz • Namensnennung 2.0 Deutschland (CC BY 2.0 DE) • https://creativecommons.org/licenses/by/2.0/de/legalcode
 ## Blender: Blender is released under the GNU General Public License • http://download.blender.org/release/GPL-license.txt
 ## Disclaimer: The author makes no representations or warranties about the non-infringement or absence of other defects concerning the CC-licensed work.
 #######################################################################################
-## Add-on Mode:
 bl_info = {
     "name": "Sudocube Addon",
     "author": "Gert Weber",
@@ -19,7 +18,6 @@ bl_info = {
     "category": "Object",
 }
 
-
 import bpy
 from bpy.types import Operator, AddonPreferences
 from bpy.props import StringProperty, IntProperty, BoolProperty
@@ -27,14 +25,6 @@ import mathutils
 import random
 import time
 import os
-# from bpy.app.handlers import persistent
-# blend_dir = os.path.dirname(bpy.data.filepath)
-# if blend_dir not in sys.path:
-#     sys.path.append(blend_dir)
-# import Sudocube
-# import importlib
-# importlib.reload(Sudocube)
-# Sudocube.main()
 
 ############### PathPanel #################
 class PathPanel(bpy.types.Panel):
@@ -49,23 +39,12 @@ class PathPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
-        # row = layout.row()
-        # row.label(text="Path to images folder")
-       
-        # col = layout.column(align=True)
-        # col.prop(context.scene.sudocube_path, "path")
-
-        # preferences = context.preferences
-        # addon_prefs = preferences.addons[__name__].preferences
         row = layout.row()
         info = context.preferences.addons[__name__].preferences.filepath
         if info == "":
-            row.label(text="Edit Path in Addon Prefs!")          
+            row.label(text="Edit Piath in Addon Prefs!")          
         else:
             row.label(text=info)
-
-        # col.prop(addon_prefs.filepath, "path")
-        # TypeError: UILayout.prop(): error with argument 1, "data" -  Function.data expected a AnyType type, not str
 
 
 ############### SudoCubePanel #################
@@ -188,8 +167,9 @@ class GameOperator(bpy.types.Operator):
         bpy.context.active_object.data.name = '000-dummycube'
 
         for i in range(10):
-            # img = os.path.join(context.scene.sudocube_path.path, "images/%s.png" % (i))
-            img = os.path.join(context.preferences.addons[__name__].preferences.filepath, "images/%s.png" % (i))
+            # script:   img = os.path.join(context.scene.sudocube_path.path, "images/%s.png" % (i))
+            # add-on:
+            img = os.path.join(context.preferences.addons[__name__].preferences.filepath, "%s.png" % (i))
             if os.path.exists(img) == True:            
                 textur = bpy.data.images.load(img) 
                 if cs<2:
@@ -340,69 +320,6 @@ class ScoreOperator(bpy.types.Operator):
     
         return {"PASS_THROUGH"}
 
-############### SudocubeSystemProperties #################
-# class SudocubeSystemProperties(bpy.types.PropertyGroup):
-#     """ bpy.data.filepath
-#     not available in Add-on Mode!
-#     Run in Scripting Mode """
-
-    # bl_idname = "scene.init_my_prop"
-    # bl_label = "Init my_prop"
-    # preferences = bpy.context.preferences
-    # addon_prefs = bpy.context.preferences.addons[__name__].preferences
-    # info = ("Path: %s" % addon_prefs.filepath)
-
-    # path : bpy.props.StringProperty(
-    #     name="",
-    #     description="Path to Directory",
-    #     default=bpy.context.preferences.addons[__name__].preferences.filepath, # AttributeError 'RestrictData' object has no attribute 'filepath'
-        
-        # if you see an exception like this, then the addon needs to be updated to access the context during execution rather then on registration
-        # default=os.path.dirname(__file__), # Addon: Missing texture: C:\Users\root\AppData\Roaming\Blender Foundation\Blender\3.3\scripts\addons\images/0.png
-        # default=os.getcwd(), # C:\Program Files\blender-3.3.1
-        # default=sys.argv[0], # C:\Program Files\blender-3.3.1
-        # (type alias) path: Module("os.path")
-        # OS routines for NT or Posix depending on what system we're on.
-        # This exports:
-        # all functions from posix or nt, e.g. unlink, stat, etc.
-        # os.path is either posixpath or ntpath
-        # os.name is either 'posix' or 'nt'
-        # os.curdir is a string representing the current directory (always '.')
-        # os.pardir is a string representing the parent directory (always '..')
-        # os.sep is the (or a most common) pathname separator ('/' or '\')
-        # os.extsep is the extension separator (always '.')
-        # os.altsep is the alternate pathname separator (None or '/')
-        # os.pathsep is the component separator used in $PATH etc
-        # os.linesep is the line separator in text files ('\r' or '\n' or '\r\n')
-        # os.defpath is the default search path for executables
-        # os.devnull is the file path of the null device ('/dev/null', etc.)
-        # Programs that import and use 'os' stand a better chance of being portable between different platforms. 
-        # Of course, they must then only use functions that are defined by all platforms (e.g., unlink and opendir), 
-        # and leave all pathname manipulation to os.path (e.g., split and join)
-        
-        # maxlen=1024,
-        # subtype='DIR_PATH'
-        # )
-
-    # @classmethod
-    # @bpy.app.handlers.persistent
-    # def poll(cls, context):
-    #     # return context.active_object is not None
-    #     return cls.path is not None
- 
-    # def execute(self, context):
-    #     if context.scene.my_prop != "initialized":
-    #         context.scene.my_prop = "initialized"
-    #         self.__class__.bl_label = "Change my_prop"
-    #     else:
-    #         context.scene.my_prop = "foobar"
-    #         self.__class__.bl_label = self.bl_label
-    #     return {'FINISHED'}
-        
-# bpy.utils.register_class(SudocubeSystemProperties)
-# bpy.types.Scene.sudocube_path = bpy.props.PointerProperty(type=SudocubeSystemProperties)
-# bpy.types.Scene.sudocube_path: bpy.props.PointerProperty(type=SudocubeSystemProperties) # # can't access bpy.context here!
-
 ############### SudoCubeSettings #################
 class SudoCubeSettings(bpy.types.PropertyGroup):
     mat: bpy.props.StringProperty(name="SudoCube Material Property", default='0')
@@ -436,34 +353,22 @@ def scoreInit():
     Score.game = len(bpy.context.scene.score_data)
     Score.score_total = 0
 
-#################################################################
+############### Addon Preferences ###############
 class SudocubeAddonPreferences(AddonPreferences):
-    # this must match the add-on name, use '__package__'
-    # when defining this in a submodule of a python package.
+    """Sudocube Texture preferences"""
     bl_idname = __name__
 
     filepath: StringProperty(
-        name="File Path",
+        name="Texture Filepath",
         subtype='FILE_PATH',
-        # subtype=sys.argv[0]
     )
-    # number: IntProperty(
-    #     name="Example Number",
-    #     default=4,
-    # )
-    # boolean: BoolProperty(
-    #     name="Example Boolean",
-    #     default=False,
-    # )
 
     def draw(self, context):
         layout = self.layout
-        layout.label(text="Preferences view for Sudocube add-on")
+        layout.label(text="Texture folder (images) for Sudocube Add-on")
         layout.prop(self, "filepath")
-        # layout.prop(self, "number")
-        # layout.prop(self, "boolean")
 
-
+############### Preferences Operator ###############
 class OBJECT_OT_addon_sudocube_prefs(Operator):
     """Display Sudocube preferences"""
     bl_idname = "object.addon_sudocube_prefs"
@@ -475,8 +380,6 @@ class OBJECT_OT_addon_sudocube_prefs(Operator):
         addon_prefs = preferences.addons[__name__].preferences
 
         info = ("Path: %s" % addon_prefs.filepath)
-        # info = ("Path: %s, Number: %d, Boolean %r" %
-        #         (addon_prefs.filepath, addon_prefs.number, addon_prefs.boolean))
 
         self.report({'INFO'}, info)
         print(info)
@@ -484,8 +387,6 @@ class OBJECT_OT_addon_sudocube_prefs(Operator):
         return {'FINISHED'}
 
 def register():
-    # bpy.types.Scene.sudocube_path = bpy.props.PointerProperty(type=SudocubeSystemProperties) # # can't access bpy.context here!
-    # bpy.app.handlers.save_post.append(bpy.types.Scene.sudocube_path)
     bpy.utils.register_class(PathPanel)
     bpy.utils.register_class(SudoCubePanel)
     bpy.utils.register_class(ExplodeOperator) 
@@ -494,7 +395,6 @@ def register():
     bpy.utils.register_class(SudocubeAddonPreferences)
 
 def unregister():
-    # bpy.utils.unregister_class(SudocubeSystemProperties)
     bpy.utils.unregister_class(PathPanel)
     bpy.utils.unregister_class(SudoCubePanel)
     bpy.utils.unregister_class(ExplodeOperator) 
