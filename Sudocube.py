@@ -149,7 +149,7 @@ class GameOperator(bpy.types.Operator):
         bpy.context.active_object.data.name = '000-dummycube'
 
         for i in range(10):
-            img = os.path.join(context.scene.sudocube_path.path, "images/%s.png" % (i))
+            img = os.path.join(context.scene.sudocube_path.path, "%s.png" % (i))
             if os.path.exists(img) == True:            
                 textur = bpy.data.images.load(img) 
                 if cs<2:
