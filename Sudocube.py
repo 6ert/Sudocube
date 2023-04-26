@@ -25,7 +25,10 @@ class PathPanel(bpy.types.Panel):
         layout = self.layout
 
         row = layout.row()
-        row.label(text="Path to images folder")
+        if context.scene.sudocube_path.valid == True:
+            row.label(text="Path to images folder", icon='FILE_REFRESH')
+        else:
+            row.label(text="images not found in Path", icon='QUESTION')
        
         col = layout.column(align=True)
         col.prop(context.scene.sudocube_path, "path")
@@ -43,6 +46,7 @@ class SudoCubePanel(bpy.types.Panel):
         layout = self.layout
         
         if context.scene.sudocube_path.path == "":
+            # context.scene.sudocube_path.path = os.path.expanduser('~/images')
             return None           
 
         GameID = len(bpy.context.scene.score_data)
@@ -149,8 +153,12 @@ class GameOperator(bpy.types.Operator):
         bpy.context.active_object.data.name = '000-dummycube'
 
         for i in range(10):
-            img = os.path.join(context.scene.sudocube_path.path, "%s.png" % (i))
-            if os.path.exists(img) == True:            
+            try:
+                img = os.path.join(context.scene.sudocube_path.path, "%s.png" % (i))
+            except:
+                raise NameError("no image found @%s" % context.scene.sudocube_path.path)
+            if os.path.exists(img) == True:
+                context.scene.sudocube_path.valid = True
                 textur = bpy.data.images.load(img) 
                 if cs<2:
                     mat = bpy.data.materials.new(name=str(i))
@@ -158,6 +166,7 @@ class GameOperator(bpy.types.Operator):
                     mat = bpy.data.materials.get(str(i))                    
             else:
                 self.report({'INFO'}, "Missing texture: %s" % (img))
+                context.scene.sudocube_path.valid = False
                 return {'CANCELLED'}                       
         
             if mat == None:
@@ -309,9 +318,18 @@ class SudocubeSystemProperties(bpy.types.PropertyGroup):
     path : bpy.props.StringProperty(
         name="",
         description="Path to Directory",
-        default=os.path.dirname(bpy.data.filepath),         maxlen=1024,
+        default=os.path.dirname(bpy.data.filepath),
+        # default=os.path.expanduser('~/images'),
+        maxlen=1024,
         subtype='DIR_PATH'
         )
+
+    valid : bpy.props.BoolProperty(
+        name="",
+        description="valid Path",
+        default=True
+    )
+
         
 bpy.utils.register_class(SudocubeSystemProperties)
 bpy.types.Scene.sudocube_path = bpy.props.PointerProperty(type=SudocubeSystemProperties)
