@@ -18,6 +18,7 @@ If there is a red exclamation mark next to it - click on it - 'make Text interna
 
 The script expects the nine numbers and a 'space' as Blender textures in .png image format.
 They are located in the 'images' folder, which should be on the same level in the file system as the script.
+You may edit the 'Path to images' later.
 
 Then execute the script via 'Run'.
 Now in the '3D Viewport' within the 'Tools' (activate with shortcut 'N') a panel 'Sudocube' should be available.
